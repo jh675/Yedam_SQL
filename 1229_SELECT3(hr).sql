@@ -37,3 +37,11 @@ WHERE department_id = (SELECT department_id
                                             FROM departments
                                             WHERE department_name = 'Shipping')
 ;
+
+SELECT *
+FROM employees
+;
+
+--교재 40페이지 연습문제 3번 (과제 겸 복습)
+SELECT first_name || '''s sal is $' || salary as "Name And Sal"
+FROM employees;
