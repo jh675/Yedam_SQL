@@ -260,19 +260,21 @@ LEFT JOIN emp e2 ON e1.MGR = e2.EMPNO;
 SELECT *
 FROM professor;
 
-SELECT p1.profno, p1.name, p1.HIREDATE, count(p2.hiredate)
+SELECT p1.profno, p1.name, p1.HIREDATE, count(p2.hiredate) AS count
 FROM professor p1
 LEFT JOIN professor p2 ON p1.HIREDATE > p2.HIREDATE
-GROUP BY p1.profno, p1.name, p1.hiredate;
+GROUP BY p1.profno, p1.name, p1.hiredate
+ORDER BY 4;
 
 -- 255p 문제 6번
 SELECT *
 FROM emp;
 
-SELECT empno, ename, hiredate, count(*) OVER (ORDER BY hiredate)-1 AS "count"
-FROM emp;
+SELECT empno, ename, hiredate, count(hiredate) OVER (ORDER BY hiredate)-1 AS "count"
+FROM emp e1;
 
 SELECT e1.empno, e1.ename, e1.hiredate, count(e2.hiredate)
 FROM emp e1
 LEFT JOIN emp e2 ON e1.hiredate > e2.hiredate
 GROUP BY e1.empno, e1.ename, e1.hiredate
+ORDER BY 4;

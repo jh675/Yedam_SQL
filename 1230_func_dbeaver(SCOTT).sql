@@ -250,3 +250,4 @@ SELECT deptno1
 		, 'etc'
 	) AS deptno1_dname
 FROM student;
+
