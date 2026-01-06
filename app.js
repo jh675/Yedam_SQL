@@ -7,10 +7,11 @@ const app = express(); // 인스턴스 생성
 // URL -> 실행함수 => 라우팅
 
 // "/"
-app.get("/", (req, res) => {
+app.get(/*라우팅*/ "/" /* URL */, (req, res) => {
+  // 여기서 /로 넘어오면 실행되는 함수.
   // req는 해당 경로로 요청을 보내는 것, res는 경로의 응답
   res.send("/ 김진환 홈에 오신 것을 환영합니다."); // send는 웹페이지에 출력.
-});
+}); // 실행함수(handler)
 
 // "/customer"
 app.get("/customer", (req, res) => {
@@ -44,7 +45,7 @@ app.listen(3000, () => {
   console.log("server excute. http://localhost:3000");
 });
 
-// (인스턴스를 담은 변수).listen(3000, () => {
+// (인스턴스를 담은 변수).listen(port_number, () => {
 // 실행할 내용
 // })
 
