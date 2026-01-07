@@ -13,16 +13,6 @@ app.get(/*라우팅*/ "/" /* URL */, (req, res) => {
   res.send("/ 김진환 홈에 오신 것을 환영합니다."); // send는 웹페이지에 출력.
 }); // 실행함수(handler)
 
-// "/customer"
-app.get("/customer", (req, res) => {
-  res.send("/customer 경로가 호출되었습니다.");
-});
-
-// "/product"
-app.get("/product", (req, res) => {
-  res.send("/product 경로가 호출되었습니다.");
-});
-
 // "/student" -> 화면에 출력
 app.get("/student/:studno", async (req, res) => {
   console.log(req.params.studno);
@@ -38,6 +28,18 @@ app.get("/emp", async (req, res) => {
   const conn = await db.getConn();
   const result = await conn.execute("SELECT * FROM emp");
   res.send(result.rows);
+});
+
+app.get("/addBoard", async (req, res) => {
+  const conn = await db.getConn();
+  const insqry = `INSERT INTO board 
+                  VALUES(6, 'null test', '', 'user01', sysdate, 0)`;
+  try {
+    const rs = await conn.execute(insqry);
+    console.log(`1행의 삽입이 완료되었습니다\n처리 완료`);
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 app.listen(3000, () => {

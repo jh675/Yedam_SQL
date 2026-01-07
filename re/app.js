@@ -1,13 +1,14 @@
+// app.js 복습
+
 // express 서버모듈
 const express = require("express"); // 모듈을 임포트
 
 const app = express(); // 인스턴스를 생성
 
 // URL -> handler => 라우팅
-// 한마디로 요약하자면 'URL(사용자요청)을 받아 적절한 handler(실행함수 혹은 처리할 코드)을 실행하는 과정'
+// 한줄로 설명하자면 'URL(사용자요청)을 받아 적절한 handler(실행함수 혹은 처리할 코드)을 실행하는 과정'
 
-app.get(
-  // 라우팅 정의
+/* 라우팅 정의 */ app.get(
   "/" /*<< 요청을 처리할 URL 경로 지정 */,
   /* 핸들러 함수 지정>>*/ (req, res) => {
     // 이 함수는 클라이언트가 지정된 URL('/')로 GET 요청을 보냈을 때 실행.
