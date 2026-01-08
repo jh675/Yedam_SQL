@@ -56,10 +56,10 @@ app.get("/boardLists", async (req, res) => {
 app.get("/delRows/:b_no", async (req, res) => {
   const b_no = req.params.b_no;
   console.log(b_no);
-  const delqry = `DELETE FROM board WHERE b_no = ${b_no}`; // 쿼리 선언
+  const delqry = `DELETE FROM board WHERE b_no = ${b_no}`; // del 쿼리
   try {
     const conn = await db.getConn();
-    const delrs = await conn.execute(delqry);
+    await conn.execute(delqry);
     await conn.commit();
     res.json({ retCode: "OK", b_no });
   } catch (e) {
