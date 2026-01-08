@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <!-- <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /> -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>게시글 작성</title>
+    <link rel="stylesheet" href="indexStyle.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- <h3 class="btn btn-primary">Welcome, JinHwan Pages</h3>
+    FORM 태그
+    <form action="#" method="post" enctype="">
+      ID: <input type="text" name="userId" /><br />
+      PW: <input type="password" name="userPw" /><br />
+      <button type="submit">submit</button>
+    </form>
+    GET 메소드로 입력 후 submit를 눌렀을 때: http://localhost:3000/index.html?userId=user&userPw=1111#
+    POST 메소드로 입력 후 submit를 눌렀을 때: http://localhost:3000/index.html#
+      -->
+    <div class="container">
+      <h1>게시글 작성</h1>
+      <form action="./addBoard" method="post" class="container">
+        <label for="bNo">게시글 번호</label>
+        <input type="text" id="bNo" name="bNo" required />
+
+        <label for="bTitle">제목</label>
+        <input type="text" id="bTitle" name="bTitle" required />
+
+        <label for="bContent">내용</label>
+        <textarea id="bContent" name="bContent" required></textarea>
+
+        <label for="bWriter">작성자</label>
+        <input type="text" id="bWriter" name="bWriter" required />
+
+        <button type="submit">게시글 등록</button>
+      </form>
+    </div>
+    <!-- 글번호 / 제목 / 작성자 / 작성시간(24시간 이전까지라면 업로드 시간을, 24시간이 지나면 일자를) / 조회수 -->
+    <div>
+      <table>
+        <caption>
+          게시판 목록
+        </caption>
+        <thead>
+          <tr>
+            <th>글번호</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성시간</th>
+            <th>조회수</th>
+            <th>삭제</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <script src="board.js"></script>
+  </body>
+</html>
