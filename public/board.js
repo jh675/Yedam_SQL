@@ -6,7 +6,6 @@ fetch("./boardLists")
   })
   // return 후 then(변수명 => {})는 사실상 변수명 = res.json()과 같다.
   .then((result) => {
-    console.log(result);
     drawTable(result);
   }) // result에 받은 것을 drawTable에 매개변수로 던져줘서 테이블을 그린다.
   .catch((e) => console.log(`에러발생 \n${e}`)); // 에러
@@ -21,7 +20,6 @@ function deleteRow(bNo) {
       if (result.retCode === "OK") {
         // result의 retCode가 OK이면 실행
         location.reload();
-        drawTable();
       } else if (result.retCode === "NG") {
         // result의 retCode가 NG면 실행
         console.log("Failed");
@@ -37,7 +35,6 @@ function deleteRow(bNo) {
 function drawTable(res) {
   // tbody subject
   const subject = document.querySelector("tbody");
-  subject.innerHTML = ""; // 기존 테이블 지우기
   res.forEach((ele) => {
     const insertHtml = `<tr>
       <td>${ele.B_NO}</td>
@@ -88,10 +85,7 @@ document.querySelector("form").addEventListener("submit", (e) => {
     // method: 요청방식 => GET, POST 중 지정한다. 쉽게 말해서 해당 URL로 전달을 하는 것.
     // headers: 서버에 어떤 형식의 데이터인지 알려주는 것. Content-Type는 어떤 타입으로 보낼것인가를 알려주는 것이며, application/json은 JSON 형식으로 보내겠다고 하는 것.
     // 참고로 headers가 없으면 express가 JSON인지 몰라서 파싱을 안한다.
-    .then((data) => {
-      console.log(data);
-      return data.json();
-    }) // fetch()실행이 성공할 경우 실행.
+    .then((data) => data.json()) // fetch()실행이 성공할 경우 실행.
     .then((result) => {
       console.log(result);
       if (result == "처리완료") {

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="memProjectCss.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+    <title>회원 관리</title>
+  </head>
+  <body>
+    <div id="container">
+      <!-- 버튼 영역 -->
+      <div id="button-area" class="d-flex gap-3 mb-3">
+        <button id="btn-list" class="btn btn-primary btn-lg">목록</button>
+        <button id="btn-add" class="btn btn-primary btn-lg">등록</button>
+      </div>
+      <hr />
+      <!-- 목록 영역 -->
+      <div id="list-area" class="area">
+        <h3>회원 관리</h3>
+        <table class="table table-striped">
+          <thead class="table-light">
+            <tr>
+              <th>회원번호</th>
+              <th>이름</th>
+              <th>연락처</th>
+              <th>기능</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <!-- 등록 영역 -->
+      <div id="add-area" class="area">
+        <h3 class="mb-4">회원 등록</h3>
+
+        <form id="member-form">
+          <!-- 아이디 + 중복확인 -->
+          <div class="mb-3">
+            <label for="mId" class="form-label">아이디</label>
+            <div class="d-flex gap-2">
+              <input
+                type="text"
+                id="mId"
+                class="form-control"
+                name="m_id"
+                placeholder="아이디"
+                required
+              />
+              <button
+                type="button"
+                id="btnIdCheck"
+                class="btn btn-outline-primary"
+                style="min-width: 120px"
+              >
+                중복확인
+              </button>
+            </div>
+
+            <!-- 중복 확인 결과 (기본 숨김) -->
+            <div class="form-check mt-2 d-none" id="idCheckArea">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="check"
+                disabled
+              />
+              <label class="form-check-label"> 아이디 사용 가능 </label>
+            </div>
+          </div>
+
+          <!-- 패스워드 -->
+          <div class="mb-3">
+            <label for="mPw" class="form-label">패스워드</label>
+            <input
+              type="password"
+              id="mPw"
+              class="form-control"
+              name="m_pw"
+              placeholder="패스워드"
+              required
+            />
+          </div>
+
+          <!-- 패스워드 확인 -->
+          <div class="mb-3">
+            <label for="mPwRe" class="form-label">패스워드 확인</label>
+            <input
+              type="password"
+              id="mPwRe"
+              class="form-control"
+              name="m_pwRe"
+              placeholder="패스워드 확인"
+              required
+            />
+          </div>
+
+          <!-- 이름 -->
+          <div class="mb-3">
+            <label for="mNm" class="form-label">이름</label>
+            <input
+              type="text"
+              id="mNm"
+              class="form-control"
+              name="m_nm"
+              placeholder="이름 입력"
+              required
+            />
+          </div>
+
+          <!-- 이메일 -->
+          <div class="mb-3">
+            <label for="mEmail" class="form-label">이메일</label>
+            <input
+              type="email"
+              id="mEmail"
+              class="form-control"
+              name="m_email"
+              placeholder="이메일 입력"
+              required
+            />
+          </div>
+
+          <!-- 연락처 -->
+          <div class="mb-3">
+            <label for="mTel" class="form-label">연락처</label>
+            <input
+              type="text"
+              id="mTel"
+              class="form-control"
+              name="m_tel"
+              placeholder="010-xxxx-xxxx"
+              required
+            />
+          </div>
+
+          <!-- 생일 -->
+          <div class="mb-3">
+            <label for="mBirth" class="form-label">생일</label>
+            <input
+              type="date"
+              id="mBirth"
+              class="form-control"
+              name="m_birth"
+            />
+          </div>
+
+          <!-- 부서 -->
+          <div class="mb-3">
+            <label for="mDeptno" class="form-label">부서</label>
+            <select class="form-select" name="m_deptno" id="mDeptno" required>
+              <option value="">선택하세요</option>
+              <option value="1">개발부</option>
+              <option value="2">영업부</option>
+              <option value="3">인사부</option>
+              <option value="4">재무부</option>
+              <option value="5">마케팅부</option>
+            </select>
+          </div>
+
+          <!-- 등록 버튼 -->
+          <button type="submit" class="btn btn-success px-4">등록</button>
+        </form>
+      </div>
+
+      <!-- 상세 영역 -->
+      <div id="detail-area" class="area">
+        <h3>회원 상세</h3>
+        <form id="detail-form">
+          <div class="mb-3">
+            <label for="dNo" class="form-label">회원번호</label>
+            <input type="text" id="dNo" class="form-control" disabled />
+          </div>
+          <div class="mb-3">
+            <label for="dId" class="form-label">아이디</label>
+            <input type="text" id="dId" class="form-control" disabled />
+          </div>
+          <div class="mb-3">
+            <label for="dPw" class="form-label">패스워드</label>
+            <input type="password" id="dPw" class="form-control" disabled />
+          </div>
+          <div class="mb-3" id="dPwRe-div" style="display: none">
+            <label for="dPwRe" class="form-label">패스워드 확인</label>
+            <input
+              type="password"
+              id="dPwRe"
+              class="form-control"
+              placeholder="패스워드 확인"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="dNm" class="form-label">이름</label>
+            <input type="text" id="dNm" class="form-control" disabled />
+          </div>
+          <div class="mb-3">
+            <label for="dEmail" class="form-label">이메일</label>
+            <input type="email" id="dEmail" class="form-control" disabled />
+          </div>
+          <div class="mb-3">
+            <label for="dTel" class="form-label">연락처</label>
+            <input type="text" id="dTel" class="form-control" disabled />
+          </div>
+          <div class="mb-3">
+            <label for="dBirth" class="form-label">생일</label>
+            <input type="date" id="dBirth" class="form-control" disabled />
+          </div>
+          <div class="mb-3">
+            <label for="dDept" class="form-label">부서</label>
+            <select id="dDept" class="form-select" disabled>
+              <option value="1">개발부</option>
+              <option value="2">영업부</option>
+              <option value="3">인사부</option>
+              <option value="4">재무부</option>
+              <option value="5">마케팅부</option>
+            </select>
+          </div>
+          <div class="d-flex gap-3">
+            <button type="button" id="btnEdit" class="btn btn-warning">
+              수정
+            </button>
+            <button
+              type="button"
+              id="btnSave"
+              class="btn btn-success"
+              style="display: none"
+            >
+              수정 완료
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="memProject.js"></script>
+  </body>
+</html>
