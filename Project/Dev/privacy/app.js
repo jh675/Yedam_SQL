@@ -7,19 +7,16 @@ const app = express(); // 인스턴스 생성
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
-app.get(/*라우팅*/ "/" /* URL */, (req, res) => {
-  // 여기서 /로 넘어오면 실행되는 함수.
-  // req는 해당 경로로 요청을 보내는 것, res는 경로의 응답
-  // res.send("/ 김진환 홈에 오신 것을 환영합니다."); // send는 웹페이지에 출력.
+app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "memProject.html"));
-}); // 실행함수(handler)
+});
 
 // "/selMem" 라우팅 => 목록
 app.get("/selMem", async (req, res) => {
-  const selqry = "SELECT m_no, m_nm, m_tel, m_birth FROM pro_mem ORDER BY 1";
+  const selsql = "SELECT m_no, m_nm, m_tel, m_birth FROM pro_mem ORDER BY 1";
   try {
     const conn = await db.getConn();
-    const rs = await conn.execute(selqry);
+    const rs = await conn.execute(selsql);
     res.send(rs.rows);
   } catch (e) {
     console.log(`에러 발생 => \n${e}`);
@@ -33,10 +30,10 @@ app.post("/insMem", async (req, res) => {
   const { m_id, m_pw, m_nm, m_tel, m_email, m_birth, m_deptno } = req.body;
   console.log(m_id);
   const birth = m_birth ? m_birth : null;
-  const insqry = `INSERT INTO pro_mem VALUES (mno_seq.NEXTVAL, :m_id, :m_pw, :m_nm, :m_tel, :m_email, :birth, :m_deptno, sysdate)`;
+  const inssql = `INSERT INTO pro_mem VALUES (mno_seq.NEXTVAL, :m_id, :m_pw, :m_nm, :m_tel, :m_email, :birth, :m_deptno, sysdate)`;
   try {
     const conn = await db.getConn();
-    const rs = await conn.execute(insqry, [
+    const rs = await conn.execute(inssql, [
       m_id,
       m_pw,
       m_nm,
@@ -45,12 +42,16 @@ app.post("/insMem", async (req, res) => {
       birth,
       m_deptno,
     ]);
-    console.log(rs);
-    conn.commit();
-    res.json({ m_id, m_pw, m_nm, m_tel, m_email, birth, m_deptno });
+    if (rs.rowsAffected > 0) {
+      conn.commit();
+      res.json({ retCode: "OK", retMsg: "등록이 완료되었습니다." });
+    }
   } catch (e) {
     console.log(`에러 발생 => \n${e}`);
-    res.json({ retCode: "NG", retMsg: "등록 실패" });
+    res.json({
+      retCode: "NG",
+      retMsg: "등록을 실패하였습니다.\n다시 시도해주세요.",
+    });
   }
 });
 
@@ -58,19 +59,19 @@ app.post("/insMem", async (req, res) => {
 app.get("/chkIdMem/:m_id", async (req, res) => {
   const m_id = req.params.m_id;
   console.log(`넘겨받은 ID값은 '${m_id}' 입니다.`);
-  const chkqry = `SELECT COUNT(m_id) AS "CNT" FROM pro_mem WHERE m_id = :m_id`;
+  const chksql = `SELECT COUNT(m_id) AS "CNT" FROM pro_mem WHERE m_id = :m_id`;
   try {
     const conn = await db.getConn();
-    const rs = await conn.execute(chkqry, { m_id });
+    const rs = await conn.execute(chksql, { m_id });
     console.log(rs);
     if (rs.rows[0].CNT > 0) {
-      res.json({ retCode: true, retMsg: "아이디가 중복됩니다." });
+      res.json({ retCode: true, retMsg: "이미 존재하는 아아디입니다." });
     } else {
-      res.json({ retCode: false, retMsg: "사용가능한 아이디입니다." });
+      res.json({ retCode: false, retMsg: "사용 가능한 아이디입니다." });
     }
   } catch (e) {
     console.log(`에러 발생 => \n${e}`);
-    res.json({ retCode: "NG", retMsg: "중복 체크 실패" });
+    res.json({ retCode: "NG", retMsg: "중복 체크를 실패하였습니다." });
   }
 });
 
@@ -78,24 +79,77 @@ app.get("/chkIdMem/:m_id", async (req, res) => {
 app.get("/detailMem/:m_no", async (req, res) => {
   const m_no = req.params.m_no;
   console.log(m_no);
-  const selqry = `SELECT * FROM pro_mem WHERE m_no = :m_no`;
+  const selsql = `SELECT * FROM pro_mem WHERE m_no = :m_no`;
   try {
     const conn = await db.getConn();
     const rs = await conn.execute(
-      selqry,
+      selsql,
       { m_no },
       { outFormat: db.OUT_FORMAT_OBJECT }
     );
-    console.log(rs.rows[0]);
     res.send(rs.rows[0]);
   } catch (e) {
     console.log(`에러 발생 => \n${e}`);
-    res.json({ retCode: "NG", retMsg: "상세 조회 실패" });
+    res.json({ retCode: "NG", retMsg: "상세 조회를 실패하였습니다" });
   }
 });
 
 // "/updMem" 라우팅 => 수정
-app.post("/updMem", async (req, res) => {});
+app.put("/updMem", async (req, res) => {
+  const updData = req.body;
+  const mNoData = updData.m_no;
+  if (!mNoData) {
+    res.json({ retCode: "NG", retMsg: "회원번호를 찾을 수 없습니다." });
+  }
+
+  let setClauses = [];
+  let params = [];
+
+  for (const key in updData) {
+    console.log(`key => ${key}`);
+    if (key === "m_no" || key === "m_id" || key === "m_birth") {
+      continue;
+    }
+
+    if (key === "m_pw") {
+      if (updData[key] === "") {
+        continue;
+      }
+    }
+
+    const col = key.toUpperCase();
+    setClauses.push(`${col} = :${key}`);
+
+    if (updData[key] === "") {
+      params.push(null);
+    } else {
+      params.push(updData[key]);
+    }
+  }
+
+  if (setClauses.length === 0) {
+    res.json({ retCode: "NG", retMsg: "수정된 내용이 없습니다." });
+  }
+
+  params.push(mNoData);
+
+  const updsql = `UPDATE pro_mem SET ${setClauses.join(
+    ", "
+  )} WHERE M_NO = :m_no`;
+  try {
+    const conn = await db.getConn();
+    const rs = await conn.execute(updsql, params);
+    if (rs.rowsAffected > 0) {
+      await conn.commit();
+      res.json({ retCode: "OK", retMsg: "회원정보 수정이 완료되었습니다." });
+    } else {
+      res.json({ retCode: "NG", retMsg: "해당 회원을 찾을 수 없습니다" });
+    }
+  } catch (e) {
+    console.log(`에러 발생 => \n${e}`);
+    res.json({ retCode: "NG", retMsg: "수정을 실패하였습니다." });
+  }
+});
 
 app.listen(3000, () => {
   console.log(`개인프로젝트 서버 실행중.\nhttp://localhost:3000`);
